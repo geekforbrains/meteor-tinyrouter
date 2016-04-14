@@ -3,25 +3,38 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 
-Template.registerHelper('currentTemplate', function() {
-    return Router.currentTemplate.get();
+Template.registerHelper('pebbleTemplate', function() {
+    return Pebble.currentTemplate.get();
 });
 
 
 Meteor.startup(function() {
-    console.log('starting meteor client');
-    Router.handleClicks();
-    Router.load(window.location.pathname);
+    Pebble.handleClicks();
+    Pebble.load(window.location.pathname);
 });
 
 
-export let Router = {
+export const Pebble = {
     currentTemplate: ReactiveVar(),
 
-    register(routes) {
+    /**
+     * Pebble.routes({
+     *   ['/', 'home']
+     * });
+     */
+    routes(routes) {
         console.log('registering routes');
         this._routes = routes;
         console.log(this._routes);
+    },
+
+    /**
+     * Pebble.errors({
+     *   404: 'not_found' 
+     * });
+     */
+    errors(templates) {
+        // TODO
     },
 
     go(path) {

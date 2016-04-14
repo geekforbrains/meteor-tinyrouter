@@ -3,32 +3,42 @@ Pebble
 
 *In early stage development and likely to change frequently.*
 
-Pebble is a tiny client-side router for Meteor. If you just want to map routes
-to templates and handle the odd function call on specific routes, then this 
-is the tool for you.
+Pebble is a tiny client-side router for Meteor. Its focus is on a minimal and
+easy to understand API.
 
 
 Quick Start
 -----------
 
 ```
-import { Router } from 'meteor/geekforbrains:pebble';
+import { Pebble } from 'meteor/geekforbrains:pebble';
 
-Router.register({
-    '/': 'home',
-    '/foo': 'foo'  
+function requiresLogin() {
+    if (!Meteor.userId()) {
+        return Pebble.redirect('/login');
+    }
+}
+
+Pebble.route('/', function() {
+    return this.render('home');
+});
+
+Pebble.route('/login', function() {
+    return this.render('login');  
+});
+
+Pebble.route('/account', requiresLogin, function() {
+    return this.render('account');
+});
+
+Pebble.error(404, function() {
+    return this.render('not_found');  
 });
 ```
-
-The `register` function takes an object of url paths as keys and template names
-as their value.
-
-In the above example, when visiting `/foo` Pebble will load the `foo` template.
-
 
 To Do
 -----
 - Error pages (404 etc)
-- Route params
+- Route args/params
 - Route callbacks
 - Shorthand user/permission checking
