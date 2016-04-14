@@ -1,6 +1,6 @@
 Package.describe({
   name: 'geekforbrains:pebble',
-  version: '0.0.1',
+  version: '0.0.2',
   summary: 'A tiny client-side router for Meteor.',
   git: 'https://github.com/geekforbrains/meteor-pebble.git',
   documentation: 'README.md'
