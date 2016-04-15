@@ -15,6 +15,7 @@ import { Router } from 'meteor/geekforbrains:tinyrouter';
 
 Router.route('/', 'home')
 Router.route('/login', 'login');
+Router.route('/profile/:username', 'profile');
 Router.route('/account', 'account', function() {
     if (!Meteor.userId) return this.redirect('login');
     return this.render('account');
@@ -46,11 +47,17 @@ By default, the route name will be used to load a template with the same name.
 In the above example the route will try to load the `home` template.
 
 The route name is also used to get the route path in your templates without
-having to hard code them.
+having to hard code them. If a route has parameters, you can pass those to the
+url helper as named arguments.
 
 ```html
 <template name="example">
     <a href="{{url 'home'}}">Go Home</a>
+    <a href="{{url 'profile' username='geekforbrains'}}">Profile</a>
+</template>
+
+<template name="home">
+    <h1>Welcome Home!</h1>
 </template>
 ```
 
