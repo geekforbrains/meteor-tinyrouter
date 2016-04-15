@@ -132,8 +132,13 @@ export const Router = {
         var self = this;
         $(document).ready(function() {
             $('a').click(function(e) {
-                e.preventDefault();
-                self.load(e.target.pathname);
+                let href = e.target.href
+                let path = e.target.pathname;
+
+                if (href.startsWith(Meteor.absoluteUrl())) {
+                    e.preventDefault();
+                    self.load(path);
+                }
             });
         });
     },
@@ -164,7 +169,7 @@ Template.registerHelper('routerData', function() {
 });
 
 
-Template.registerHelper('url', function(name, params) {
+Template.registerHelper('urlFor', function(name, params) {
     return Router.reverse(name, params.hash);
 });
 

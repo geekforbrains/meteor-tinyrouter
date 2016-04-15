@@ -52,8 +52,8 @@ url helper as named arguments.
 
 ```html
 <template name="example">
-    <a href="{{url 'home'}}">Go Home</a>
-    <a href="{{url 'profile' username='geekforbrains'}}">Profile</a>
+    <a href="{{urlFor 'home'}}">Go Home</a>
+    <a href="{{urlFor 'profile' username='geekforbrains'}}">Profile</a>
 </template>
 
 <template name="home">
