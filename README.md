@@ -16,8 +16,8 @@ import { Router } from 'meteor/geekforbrains:tinyrouter';
 Router.route('/', 'home')
 Router.route('/login', 'login');
 Router.route('/account', 'account', function() {
-    if (!Meteor.userId()) this.redirect('login');
-    this.render('account');
+    if (!Meteor.userId) return this.redirect('login');
+    return this.render('account');
 });
 ```
 
@@ -50,7 +50,7 @@ having to hard code them.
 
 ```html
 <template name="example">
-    <a href="{{url name='home'}}">Go Home</a>
+    <a href="{{url 'home'}}">Go Home</a>
 </template>
 ```
 
