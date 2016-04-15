@@ -6,13 +6,13 @@ import PathToRegexp from 'path-to-regexp';
 
 
 export const Router = {
-    debug: false,
-    template: ReactiveVar(),
-    notFoundTemplate: 'not_found',
-    currentRoute: null,
-    currentParams: {},
     _routes: [],
     _nameMap: {},
+
+    debug: false,
+    template: ReactiveVar(),
+    params: ReactiveVar({params: {}}),
+    notFoundTemplate: 'not_found',
 
     init() {
         this.log('initializing');
@@ -67,7 +67,7 @@ export const Router = {
      */
     redirect(name, params) {
         path = this.reverse(name, params);
-        this.log('redirecting name:', name, 'params:', params, 'to:', path);
+        this.log('redirecting to:', path);
         this.load(path);
     },
 
@@ -76,10 +76,19 @@ export const Router = {
      */
     reverse(name, params) {
         const route = this._routes[this._nameMap[name]];
+
+        for(let i = 0; i < route.keys.length; i++) {
+            const key = route.keys[i]['name'];
+            if (params[key] === undefined) {
+                this.error('cant build url, missing param "'+key+'" for route "'+name+'"');
+                return;
+            }
+        }
+
         if (route) {
             return route.reverse(params);
         } else {
-            this.error('cant get url, route doesnt exist:', name);
+            this.error('cant build url for "'+name+'", route doesnt exist');
         }
     },
 
@@ -97,12 +106,13 @@ export const Router = {
 
         for (let i = 0; i < this._routes.length; i++) {
             const route = this._routes[i];
-            this.log('checking route path:', route.path);
+            this.log('comparing route:', route.path);
             const result = route.re.exec(path); 
 
             if (result) {
                 const params = this.buildParams(route.keys, result);
-                this.currentParams = params;
+                this.params.set({params: params});
+                // this.currentParams = params;
                 this.currentRoute = route;
                 return route.callback.call(this, params);
             }
@@ -144,13 +154,18 @@ export const Router = {
 }
 
 
-Template.registerHelper('currentTemplate', function() {
+Template.registerHelper('routerTemplate', function() {
     return Router.template.get();
 });
 
 
+Template.registerHelper('routerData', function() {
+    return Router.params.get();
+});
+
+
 Template.registerHelper('url', function(name, params) {
-    return Router.reverse(name, params);
+    return Router.reverse(name, params.hash);
 });
 
 
