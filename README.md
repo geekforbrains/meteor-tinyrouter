@@ -10,7 +10,7 @@ easy to understand API.
 Quick Start
 -----------
 
-```
+```js
 import { Router } from 'meteor/geekforbrains:tinyrouter';
 
 Router.add('/', 'home')
@@ -26,7 +26,7 @@ Basic Routing
 
 A basic route is made up of a path and a name respectively.
 
-```
+```js
 Router.add('/', 'home');
 ```
 
@@ -36,7 +36,7 @@ In the above example the route will try to load the `home` template.
 The route name is also used to get the route path in your templates without
 having to hard code them.
 
-```
+```html
 <template name="example">
     <a href="{{url name='home'}}">Go Home</a>
 </template>
@@ -48,7 +48,7 @@ Advanced Routing
 
 An advanced route may specify a callback as its third parameter.
 
-```
+```js
 Router.add('/', 'home', function() {
     // Extra logic here (maybe check if user is logged in)
     this.render('some_template');  
@@ -68,7 +68,7 @@ Middleware
 Middleware is used to run functions before every request. They're a great way
 to add logic to a range of routes.
 
-```
+```js
 Router.middleware(function() {
     if (Router.path.startsWith('/account') && !Meteor.userId()) {
         return Router.redirect('login')
