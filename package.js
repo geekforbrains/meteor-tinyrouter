@@ -6,6 +6,10 @@ Package.describe({
   documentation: 'README.md'
 });
 
+Npm.depends({
+  'path-to-regexp': '1.2.1'
+});
+
 Package.onUse(function(api) {
   api.versionsFrom('1.3.1');
   api.use('ecmascript');

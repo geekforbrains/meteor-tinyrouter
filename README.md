@@ -13,13 +13,25 @@ Quick Start
 ```js
 import { Router } from 'meteor/geekforbrains:tinyrouter';
 
-Router.add('/', 'home')
-Router.add('/login', 'login');
-Router.add('/account', 'account', function() {
+Router.route('/', 'home')
+Router.route('/login', 'login');
+Router.route('/account', 'account', function() {
     if (!Meteor.userId()) this.redirect('login');
     this.render('account');
 });
 ```
+
+Add a dynamic template to your HTML.
+
+```html
+<body>
+    {{Template.dynamic template=currentTemplate}}
+</body>
+```
+
+TinyRouter will handle swapping out the above dynamic template with the template
+associated with each route by setting the `currentTemplate` reactive var.
+
 
 Basic Routing
 -------------
@@ -27,7 +39,7 @@ Basic Routing
 A basic route is made up of a path and a name respectively.
 
 ```js
-Router.add('/', 'home');
+Router.route('/', 'home');
 ```
 
 By default, the route name will be used to load a template with the same name.
@@ -49,7 +61,7 @@ Advanced Routing
 An advanced route may specify a callback as its third parameter.
 
 ```js
-Router.add('/', 'home', function() {
+Router.route('/', 'home', function() {
     // Extra logic here (maybe check if user is logged in)
     this.render('some_template');  
 });
@@ -62,7 +74,7 @@ This can also be a way to load templates dynamically or to use a different
 template name from your route name.
 
 
-Middleware
+Middleware (TODO)
 ----------
 
 Middleware is used to run functions before every request. They're a great way
