@@ -19,9 +19,6 @@ Router.add('/account', 'account', function() {
     if (!Meteor.userId()) this.redirect('login');
     this.render('account');
 });
-
-Router.add(404, 'not_found');
-Router.add(500, 'internal_error');
 ```
 
 Basic Routing
@@ -74,7 +71,7 @@ to add logic to a range of routes.
 ```
 Router.middleware(function() {
     if (Router.path.startsWith('/account') && !Meteor.userId()) {
-        retourn Router.redirect('login')
+        return Router.redirect('login')
     }
 });
 ```
