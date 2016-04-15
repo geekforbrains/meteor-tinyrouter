@@ -25,12 +25,12 @@ Add a dynamic template to your HTML.
 
 ```html
 <body>
-    {{Template.dynamic template=currentTemplate}}
+    {{Template.dynamic template=routerTemplate data=routerData}}
 </body>
 ```
 
 TinyRouter will handle swapping out the above dynamic template with the template
-associated with each route by setting the `currentTemplate` reactive var.
+associated with each route by setting the `routerTemplate` reactive var.
 
 
 Basic Routing
