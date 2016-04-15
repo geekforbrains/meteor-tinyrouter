@@ -26,7 +26,7 @@ Add a dynamic template to your HTML.
 
 ```html
 <body>
-    {{Template.dynamic template=routerTemplate data=routerData}}
+    {{> Template.dynamic template=routerTemplate data=routerData}}
 </body>
 ```
 

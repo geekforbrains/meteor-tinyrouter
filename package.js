@@ -1,6 +1,6 @@
 Package.describe({
   name: 'geekforbrains:tinyrouter',
-  version: '0.0.2',
+  version: '0.0.3',
   summary: 'A tiny client-side router for Meteor.',
   git: 'https://github.com/geekforbrains/meteor-tinyrouter.git',
   documentation: 'README.md'
