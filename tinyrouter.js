@@ -12,7 +12,7 @@ export const Router = {
 
     debug: false,
     template: ReactiveVar(),
-    params: ReactiveVar({params: {}}),
+    params: ReactiveVar({}),
     notFoundTemplate: 'notfound',
 
     init() {
@@ -123,7 +123,7 @@ export const Router = {
 
             if (result) {
                 const params = this.buildParams(route.keys, result);
-                this.params.set({params: params});
+                this.params.set(params);
                 this.currentRoute = route;
 
                 // Trigger middleware
