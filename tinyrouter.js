@@ -8,11 +8,12 @@ import PathToRegexp from 'path-to-regexp';
 export const Router = {
     _routes: [],
     _nameMap: {},
+    _middleware: [],
 
     debug: false,
     template: ReactiveVar(),
     params: ReactiveVar({params: {}}),
-    notFoundTemplate: 'not_found',
+    notFoundTemplate: 'notfound',
 
     init() {
         this.log('initializing');
@@ -24,7 +25,7 @@ export const Router = {
      * Register a new route.
      *
      * @path - The URL route to listen for
-     * @name - The name of the route for template lookups. Also 
+     * @name - The name of the route for template lookups. Also
      * used as the template name to be loaded if a callback isn't specified.
      * @callback - An *optional* callback for handling advanced route logic.
      */
@@ -46,6 +47,17 @@ export const Router = {
         });
 
         this._nameMap[name] = index;
+    },
+
+    /**
+     * Registers a callback to be triggered on every route change. Its up to the
+     * callback to figure out what to do with itself.
+     *
+     * Note that order of registration matters. The callbacks are called in the
+     * order they were registered.
+     */
+    middleware(callback) {
+      this._middleware.push(callback);
     },
 
     /**
@@ -95,7 +107,7 @@ export const Router = {
     /**
      * Search routes for a match with the given path and call its callback.
      *
-     * If no match is found, load `not_found` template.
+     * If no match is found, load `notfound` template.
      */
     load(path) {
         this.log('loading path:', path);
@@ -107,13 +119,19 @@ export const Router = {
         for (let i = 0; i < this._routes.length; i++) {
             const route = this._routes[i];
             this.log('comparing route:', route.path);
-            const result = route.re.exec(path); 
+            const result = route.re.exec(path);
 
             if (result) {
                 const params = this.buildParams(route.keys, result);
                 this.params.set({params: params});
-                // this.currentParams = params;
                 this.currentRoute = route;
+
+                // Trigger middleware
+                for (let x = 0; x < this._middleware.length; x++) {
+                  const callback = this._middleware[x];
+                  if (callback() === false) return;
+                }
+
                 return route.callback.call(this, params);
             }
         }
