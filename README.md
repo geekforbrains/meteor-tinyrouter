@@ -1,8 +1,6 @@
 TinyRouter
 ==========
 
-*In early stage development and likely to change frequently.*
-
 TinyRouter is a tiny client-side router for Meteor. Its focus is on a minimal and
 easy to understand API.
 
@@ -75,13 +73,13 @@ Router.route('/', 'home', function() {
 ```
 
 When using a callback, you *must* specify the template name to be rendered, it
-will not be loaded for you automatically. 
+will not be loaded for you automatically.
 
-This can also be a way to load templates dynamically or to use a different 
+This can also be a way to load templates dynamically or to use a different
 template name from your route name.
 
 
-Middleware (TODO)
+Middleware
 ----------
 
 Middleware is used to run functions before every request. They're a great way
@@ -89,12 +87,16 @@ to add logic to a range of routes.
 
 ```js
 Router.middleware(function() {
-    if (Router.path.startsWith('/account') && !Meteor.userId()) {
-        return Router.redirect('login')
+    const path = Router.currentRoute.path;
+    if (path.startsWith('/account') && !Meteor.userId()) {
+        Router.redirect('login')
+        return false; // Returning false stops any further route execution
     }
 });
 ```
 
 The above middleware will be run for every URL change. It checks to see if the
-route starts with `/account` and if it does ensures a user is logged in or 
+route starts with `/account` and if it does ensures a user is logged in or
 redirects back to the `/login` route.
+
+Middleware is run in the ordered its registered.
